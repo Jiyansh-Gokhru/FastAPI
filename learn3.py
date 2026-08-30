@@ -1,23 +1,26 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-app = FastAPI()
-class loanapplication(BaseModel):
-    age:int
-    income:float
-    loan_ammount:float
-    employment_years:int
-@app.post("/predict")
-def post(application: loanapplication): 
+app = FastAPI() 
+class Loanapplicaton(BaseModel):
+    name : str
+    age : int
+    income : float
+    experience_year: int
+    loan_ammount : float
 
-    # pretend its an trend moodel..
-    if application.income > 500000 and  application.employment_years>2:
-        decition="Approved"
-    else:
-        decition="Rejected"
+@app.post("/predict")
+def predict_post (application: Loanapplicaton):
+    #model logic    
+    approved = (
+        
+        application.income in range(1000,100000)  and
+        application.age>18 and 
+        application.experience_year>2 and 
+        application.loan_ammount<100000000  
+    )
 
     return {
-        "application_age":application.age,
-        "decision":decition,
-        "status":"active"
+        "applicant name" : application.name,
+        "Status of approvel": "Approved" if approved else "Rejected"
     }
