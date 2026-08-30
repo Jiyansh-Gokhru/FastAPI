@@ -35,7 +35,7 @@ def calculate_bill(order: FoodOrder):
         "status": "Order Placed Successfully!",
         "order_details": {
             "burger": f"{order.burger_qty} x ₹{MENU_PRICES['burger']} = ₹{burger_total}",
-            "pizza": f"{order.pizza_qty} x ₹{MENU_PRICES['pizza']} = ₹{pizza_total}"
+            "pizza": f"{order.pizza_qty} x ₹{MENU_PRICES['pizza']} = ₹{pizza_total}",
             "fries": f"{order.fries_qty} x ₹{MENU_PRICES['fries']} = ₹{fries_total}"
         },
         "total_bill": f"₹{grand_total}"
