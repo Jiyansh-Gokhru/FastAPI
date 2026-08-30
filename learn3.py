@@ -13,7 +13,6 @@ class Loanapplicaton(BaseModel):
 def predict_post (application: Loanapplicaton):
     #model logic    
     approved = (
-        
         application.income in range(1000,100000)  and
         application.age>18 and 
         application.experience_year>2 and 
