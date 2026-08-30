@@ -1,21 +1,42 @@
-#diffrence in get and post!
+#using get and post!
 from fastapi import FastAPI
 from pydantic import BaseModel
 app = FastAPI()
 
-fake_database = {1: "Burger", 2: "Pizza" , 3: "Fries"}
+#get
+db = {1: "Burger", 2: "Pizza" , 3: "Fries"}
 
 @app.get("/get-item/{item_id}")
 def read_item(item_id: int):
-    return {"item": fake_database.get(item_id, "Item not found")}
+    return {"item": db.get(item_id, "Item not found")}
 
-orders_db = []
+#post
+MENU_PRICES = {
+    "burger": 80,   
+    "pizza": 150,
+    "fries": 100
+}
 
-class Order(BaseModel):
-    item_name: str
-    quantity: int
 
-@app.post("/place-order/")
-def create_order(order: Order):
-    orders_db.append(order)
-    return {"message": "Order placed successfully!", "current_orders": orders_db}
+class FoodOrder(BaseModel):
+    burger_qty: int = 0
+    pizza_qty: int = 0
+    fries_qty: int = 0
+
+@app.post("/order-food/")
+def calculate_bill(order: FoodOrder):
+   
+    burger_total = order.burger_qty * MENU_PRICES["burger"]
+    pizza_total = order.pizza_qty * MENU_PRICES["pizza"]
+    fries_total = order.fries_qty * MENU_PRICES["fries"]
+    grand_total = burger_total + pizza_total + fries_total
+
+    return {
+        "status": "Order Placed Successfully!",
+        "order_details": {
+            "burger": f"{order.burger_qty} x ₹{MENU_PRICES['burger']} = ₹{burger_total}",
+            "pizza": f"{order.pizza_qty} x ₹{MENU_PRICES['pizza']} = ₹{pizza_total}",
+            "fries": f"{order.fries_qty} x ₹{MENU_PRICES['fries']} = ₹{fries_total}"
+        },
+        "total_bill": f"₹{grand_total}"
+    }
